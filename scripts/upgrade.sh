@@ -42,7 +42,11 @@ replace_binary() {
   fi
   info "Deploying new k3s binary to $K3S_BIN_PATH"
   cp $NEW_BINARY $FULL_BIN_PATH
-  info "K3s binary has been replaced successfully"
+  if [ $? -eq 0 ]; then
+    info "K3s binary has been replaced successfully"
+  else
+    fatal "K3s binary cannot be replaced"
+  fi
   return
 }
 
