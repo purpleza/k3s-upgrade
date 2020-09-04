@@ -36,6 +36,9 @@ replace_binary() {
   fi
   info "Comparing old and new binaries"
   BIN_COUNT="$(sha256sum $NEW_BINARY $FULL_BIN_PATH | cut -d" " -f1 | uniq | wc -l)"
+  if [ $? -eq 0 ]; then
+    fatal "check sum failed"
+  fi
   if [ $BIN_COUNT == "1" ]; then
     info "Binary already been replaced"
     exit 0
