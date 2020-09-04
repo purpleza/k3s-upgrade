@@ -12,7 +12,7 @@ fatal()
 }
 
 get_k3s_process_info() {
-  K3S_PID=$(ps -ef | grep -E "k3s .*(server|agent)" | grep -E -v "(init|grep|channelserver|supervise-daemon)" | awk '{print $1}')
+  K3S_PID=$(ps -ef | grep -E "k3s .*(server|agent)" | grep -E -v "(\sinit|grep|channelserver|supervise-daemon)" | awk '{print $1}')
   if [ -z "$K3S_PID" ]; then
     fatal "K3s is not running on this server"
   fi
@@ -39,7 +39,7 @@ replace_binary() {
   if [ $BIN_COUNT == "1" ]; then
     info "Binary already been replaced"
     exit 0
-  fi	  	
+  fi
   info "Deploying new k3s binary to $K3S_BIN_PATH"
   cp $NEW_BINARY $FULL_BIN_PATH
   info "K3s binary has been replaced successfully"
