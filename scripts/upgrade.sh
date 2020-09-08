@@ -25,6 +25,9 @@ get_k3s_process_info() {
   if [ -z "$K3S_BIN_PATH" ]; then
     fatal "Failed to fetch the k3s binary path from process $K3S_PID"
   fi
+  if [ -L "/host$K3S_BIN_PATH" ]; then
+    K3S_BIN_PATH="$(readlink /host$K3S_BIN_PATH)"
+  fi
   return
 }
 
@@ -36,7 +39,7 @@ replace_binary() {
   fi
   info "Comparing old and new binaries"
   BIN_COUNT="$(sha256sum $NEW_BINARY $FULL_BIN_PATH | cut -d" " -f1 | uniq | wc -l)"
-  if [ $? -eq 0 ]; then
+  if [ $? -ne 0 ]; then
     fatal "check sum failed"
   fi
   if [ $BIN_COUNT == "1" ]; then
